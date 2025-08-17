@@ -26,11 +26,11 @@ jobs:
     # 手动查询服务器公钥，并且添加服务器到known_hosts
     - name: Add server to known hosts
       run: |
-        ssh-keyscan -H 34.129.109.229 >> ~/.ssh/known_hosts
+        ssh-keyscan -H 34.129.155.98 >> ~/.ssh/known_hosts
     
     - name: Deploy to GCP
       env: #声明一些变量，下面会用到
-        HOST: 34.129.109.229 # 替换为你的实际 GCP IP
+        HOST: 34.129.155.98 # 替换为你的实际 GCP IP
         PROJECT_NAME: ai-agents
       run: |
         # 创建部署脚本
@@ -94,7 +94,7 @@ jobs:
       run: |
         echo "✅ 部署流程完成!"
         echo "📋 部署信息："
-        echo "  - 服务器: 34.129.109.229"
+        echo "  - 服务器: 34.129.155.98"
         echo "  - 项目路径: /root/ai-agents"
         echo "  - Python版本: 3.11"
         echo "  - 部署时间: $(date)"
