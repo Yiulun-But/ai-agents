@@ -1,5 +1,11 @@
 from fastapi import APIRouter
-from .endpoints import auth, digital_humans, user, conversations, chroma
+from .endpoints import (
+    auth, 
+    digital_humans, 
+    user, 
+    conversations, 
+    chroma
+)
 from .admin import admin_router
 
 api_router = APIRouter()
@@ -38,6 +44,8 @@ api_router.include_router(
     prefix="/chroma",
     tags=["Chroma 向量数据库"]
 )
+
+
 
 # 包含管理后台路由
 api_router.include_router(
