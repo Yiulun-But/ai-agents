@@ -50,7 +50,7 @@ services:
       - ai-agents-network
 
   ai-agents:
-    image: docker.io/deuspio/ai-agents:latest
+    image: docker.io/raccoon571/ai-agents-fork:latest
     container_name: ai-agents-app
     profiles:
       - dev
