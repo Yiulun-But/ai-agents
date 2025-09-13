@@ -80,6 +80,26 @@ class Settings(BaseSettings):
     # OpenAI 配置
     OPENAI_API_KEY: Optional[str] = None
     LLM_MODEL: str = "gpt-4o-mini"
+    OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
+    
+    # RAG 系统配置 (默认启用)
+    RAG_MEMORY_TYPE: str = "graph"  # graph, simple, etc.
+    RAG_MAX_CONTEXT_RESULTS: int = 5
+    RAG_MEMORY_COLLECTION: str = "ai_agents_rag_memory"
+    
+    # Web Search 配置
+    SEARCH_PROVIDER: str = "auto"  # auto, duckduckgo, serper, mock
+    SERPER_API_KEY: Optional[str] = None
+    SEARCH_MAX_RESULTS: int = 5
+    SEARCH_ENABLED: bool = True
+    
+    # GraphRAG 配置 (为未来扩展预留)
+    GRAPH_RAG_ENABLED: bool = False
+    GRAPH_RAG_COLLECTION: str = "ai_agents_graph_rag"
+    
+    # 对话配置
+    MAX_CONVERSATION_CONTEXT: int = 10
+    CONVERSATION_MEMORY_ENABLED: bool = True
 
     class Config:
         # 不在这里指定 env_file，因为我们已经手动加载了
@@ -95,3 +115,8 @@ print(f"📊 调试模式: {'开启' if settings.DEBUG else '关闭'}")
 print(f"🔗 MySQL 数据库: {settings.DATABASE_URL}")
 print(f"🔗 MongoDB 数据库: {settings.MONGODB_URL}")
 print(f"🔗 Neo4j 数据库: {settings.NEO4J_URI}")
+print(f"🔗 ChromaDB 目录: {settings.CHROMA_PERSIST_DIRECTORY}")
+print(f"🤖 RAG 系统: 启用 (默认管道)")
+print(f"🔍 Web 搜索: {'启用' if settings.SEARCH_ENABLED else '禁用'} ({settings.SEARCH_PROVIDER})")
+print(f"🧠 LLM 模型: {settings.LLM_MODEL}")
+print(f"📝 嵌入模型: {settings.OPENAI_EMBEDDING_MODEL}")
