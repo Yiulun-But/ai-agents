@@ -1,8 +1,14 @@
 """
-记忆服务层
-实现具体的记忆存储和管理功能
+Memory services for RAG system
 """
+from .base_memory import BaseMemorySystem, MemoryItem, RetrievalResult
+from .graph_memory import GraphMemorySystem
+from .memory_manager import MemoryManager
 
-# 未来在这里导入具体的记忆服务实现
-
-__all__ = []
+__all__ = [
+    "BaseMemorySystem", 
+    "MemoryItem", 
+    "RetrievalResult", 
+    "GraphMemorySystem", 
+    "MemoryManager"
+]

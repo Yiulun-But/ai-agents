@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-AI Agents 是一个基于 FastAPI 的后端系统，提供 AI 代理服务，集成了多种数据库（MySQL、MongoDB、Neo4j、ChromaDB）并支持 LangChain/LangGraph 来构建对话式 AI 代理。
+AI Agents 是一个基于 FastAPI 的后端系统，提供 AI 代理服务，集成了多种数据库（MySQL、MongoDB、Neo4j、ChromaDB）。系统使用 **RAG (检索增强生成)** 作为默认对话管道，提供记忆增强的智能对话体验。
 
 ## 开发命令
 
@@ -77,9 +77,11 @@ API 层 (FastAPI 路由)
    - 通过 Pydantic schemas 进行输入验证
    - JWT 认证保护端点
 
-2. **服务层** （计划中但未完全实现）
+2. **服务层** (完全实现 RAG 架构)
    - 业务逻辑和编排
-   - AI 模型集成（LangChain/LangGraph）
+   - RAG 对话管道 (`app/services/rag/`)
+   - 记忆管理系统 (`app/services/memory/`)
+   - Web 搜索服务 (`app/services/search/`)
 
 3. **仓储层** (`app/repositories/`)
    - 数据访问抽象
@@ -99,6 +101,40 @@ API 层 (FastAPI 路由)
 - **MongoDB**: 文档存储、对话历史
 - **Neo4j**: 知识图谱、关系映射
 - **ChromaDB**: 向量存储、语义搜索
+
+### RAG 系统架构
+
+系统使用 **RAG (检索增强生成)** 作为默认对话管道，提供记忆增强的智能体验：
+
+#### RAG 组件
+1. **记忆系统** (`app/services/memory/`)
+   - `GraphMemorySystem`: LangGraph 启发的条件路由工作流
+   - `MemoryManager`: 高级异步/同步接口
+   - ChromaDB 持久化存储 + OpenAI 嵌入
+
+2. **搜索服务** (`app/services/search/`)
+   - 多提供商支持：DuckDuckGo, Serper.dev, Mock
+   - 自动故障转移和提供商切换
+   - 异步操作支持
+
+3. **RAG 编排器** (`app/services/rag/`)
+   - `RAGService`: 主要编排服务
+   - `ConversationService`: 增强的对话包装器
+   - 流式响应支持
+
+#### RAG 工作流
+1. **输入解析**: 实体提取和意图分类
+2. **上下文检索**: 从 ChromaDB 进行语义搜索
+3. **工具评估**: 确定是否需要 Web 搜索
+4. **工具执行**: 条件性 Web 搜索执行
+5. **结果合并**: 组合记忆和工具结果
+6. **响应生成**: 使用 OpenAI 与增强上下文
+
+#### GraphRAG 就绪架构
+- 条件路由框架支持添加 GraphRAG 节点
+- 意图检测可识别图相关查询
+- 占位符基础设施已准备就绪
+- 可扩展设计便于添加 GraphRAG 服务
 
 ### 核心模块
 
