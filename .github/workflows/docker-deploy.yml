@@ -169,12 +169,12 @@ jobs:
         echo "🔑 登录到 Docker Hub..."
         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.io -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
         
-        # 使用docker-compose更新和部署（自动处理网络、依赖等）
+        # 使用docker compose更新和部署（自动处理网络、依赖等）
         echo "📥 拉取最新镜像..."
-        docker-compose --profile dev pull
-        
+        docker compose --profile dev pull
+
         echo "🚀 启动所有服务..."
-        docker-compose --profile dev up -d
+        docker compose --profile dev up -d
         
         # 等待服务完全启动
         echo "⏳ 等待服务启动..."
@@ -182,22 +182,22 @@ jobs:
         
         # 检查服务状态
         echo "🔍 检查服务状态..."
-        docker-compose ps
-        
+        docker compose ps
+
         # 显示应用日志
         echo "📋 应用启动日志："
-        docker-compose logs --tail=30 ai-agents
+        docker compose logs --tail=30 ai-agents
         
         # 健康检查（直接使用curl检查）
         echo "🩺 执行健康检查..."
         for i in {1..6}; do
           if curl -s -f http://localhost:8000/docs > /dev/null 2>&1; then
             echo "✅ 应用健康检查通过！"
-            docker-compose ps
+            docker compose ps
             break
           elif [ \$i -eq 6 ]; then
             echo "❌ 健康检查超时，检查详细日志："
-            docker-compose logs --tail=50 ai-agents
+            docker compose logs --tail=50 ai-agents
             exit 1
           else
             echo "⏳ 等待应用启动... (\$i/6)"
@@ -233,9 +233,9 @@ jobs:
         echo "  - 应用首页: http://34.129.155.98:8000/"
         echo ""
         echo "🔧 服务器管理命令："
-        echo "  - 查看所有服务状态: docker-compose ps"
-        echo "  - 查看应用日志: docker-compose logs ai-agents"
-        echo "  - 实时查看日志: docker-compose logs -f ai-agents"
-        echo "  - 重启应用: docker-compose restart ai-agents"
-        echo "  - 停止所有服务: docker-compose --profile dev down"
-        echo "  - 启动所有服务: docker-compose --profile dev up -d" 
+        echo "  - 查看所有服务状态: docker compose ps"
+        echo "  - 查看应用日志: docker compose logs ai-agents"
+        echo "  - 实时查看日志: docker compose logs -f ai-agents"
+        echo "  - 重启应用: docker compose restart ai-agents"
+        echo "  - 停止所有服务: docker compose --profile dev down"
+        echo "  - 启动所有服务: docker compose --profile dev up -d" 
